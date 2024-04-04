@@ -1,24 +1,33 @@
-# README
+# 美少女散歩
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## 起動方法
 
-Things you may want to cover:
+1. まずは Docker をインストールする
 
-* Ruby version
+<https://docs.docker.com/engine/install/>
 
-* System dependencies
+2. gem のインストール
 
-* Configuration
+```shell
+bundle install
+```
 
-* Database creation
+3. Dockerfile のビルド
 
-* Database initialization
+```shell
+docker compose build
+```
 
-* How to run the test suite
+4. 起動してみる
 
-* Services (job queues, cache servers, search engines, etc.)
+```shell
+docker compose watch
+```
 
-* Deployment instructions
+もしくは
 
-* ...
+```
+docker compose up -d
+```
+
+その後ブラウザで`localhost:3000`にアクセス！
