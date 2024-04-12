@@ -1,0 +1,2 @@
+class VisitedPlace < ApplicationRecord
+end
