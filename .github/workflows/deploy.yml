@@ -59,7 +59,7 @@ jobs:
             RAILS_MASTER_KEY=RAILS_MASTER_KEY:latest
             DATABASE_URL=DATABASE_URL:latest
           project_id: ${{ vars.GCP_PROJECT_ID }}
-          port: 3000
+          flags: "--allow-unauthenticated --port=3000"
 
       - name: "Use output"
         run: 'curl "${{ steps.deploy.outputs.url }}"'
