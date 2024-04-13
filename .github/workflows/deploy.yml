@@ -41,6 +41,11 @@ jobs:
           export REVISION_TAG="${{ github.sha }}"
           export CLOUD_RUN_SA="${{ vars.CLOUD_RUN_SA }}"
           export ENVIRONMENT="production"
+          export CLOUDSDK_CORE_PROJECT="${{ vars.GCP_PROJECT_ID }}"
+          export CLOUDSDK_PROJECT="${{ vars.GCP_PROJECT_ID }}"
+          export GCLOUD_PROJECT="${{ vars.GCP_PROJECT_ID }}"
+          export GCP_PROJECT="${{ vars.GCP_PROJECT_ID }}"
+          export GOOGLE_CLOUD_PROJECT="${{ vars.GCP_PROJECT_ID }}"
       - name: Deploy to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v2
