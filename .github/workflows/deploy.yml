@@ -3,6 +3,7 @@ on:
     branches: [feature/deploy_production_settings]
 jobs:
   deploy:
+    name: deploy workflow
     runs-on: ubuntu-latest
     permissions:
       id-token: write
