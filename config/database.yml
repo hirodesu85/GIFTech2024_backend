@@ -45,6 +45,4 @@ development:
 #
 production:
   <<: *default
-  database: gif_tech2024_backend_production
-  username: gif_tech2024_backend
-  password: <%= ENV["GIF_TECH2024_BACKEND_DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>
