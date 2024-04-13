@@ -1,10 +1,11 @@
 on:
   push:
-    branches: [feature/deploy_production_settings]
+    branches: [main]
 jobs:
   deploy:
     name: deploy workflow
     runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' || github.base_ref == 'main' }}
     permissions:
       id-token: write
       contents: read
