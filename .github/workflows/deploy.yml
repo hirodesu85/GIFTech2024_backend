@@ -1,0 +1,53 @@
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' || github.base_ref == 'main' }}
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Google Auth
+        id: auth
+        uses: "google-github-actions/auth@v2"
+        with:
+          token_format: "access_token"
+          workload_identity_provider: "${{ secrets.WIF_PROVIDER }}"
+          service_account: "${{ secrets.WIF_SERVICE_ACCOUNT }}"
+      - name: Docker Auth
+        id: docker-auth
+        uses: "docker/login-action@v3"
+        with:
+          username: "oauth2accesstoken"
+          password: "${{ steps.auth.outputs.access_token }}"
+          registry: "asia-northeast1-docker.pkg.dev"
+      - name: Build, tag and push container
+        id: build-image
+        uses: docker/build-push-action@v5
+        with:
+          ref: ${{ github.sha }}
+          context: .
+          push: true
+          tags: |
+            asia-northeast1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ github.sha }}
+      - name: Create Service declaration
+        run: |-
+          export CONTAINER_IMAGE="asia-northeast1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ github.sha }}"
+          export SERVICE_NAME="${{ vars.SERVICE_NAME }}"
+          export PROJECT_ID="${{ vars.GCP_PROJECT_ID }}"
+          export REVISION_TAG="${{ github.sha }}"
+          export CLOUD_RUN_SA="${{ vars.CLOUD_RUN_SA }}"
+          export ENVIRONMENT="production"
+          envsubst < ./service-yaml/container.yaml > container-production.yaml
+          cat container-production.yaml
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ vars.SERVICE_NAME }}
+          region: asia-northeast1
+          metadata: container-production.yaml
