@@ -33,6 +33,7 @@ jobs:
           tags: |
             asia-northeast1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ github.sha }}
       - name: Create Service declaration
+        id: create-service-declaration
         run: |-
           export CONTAINER_IMAGE="asia-northeast1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ github.sha }}"
           export SERVICE_NAME="${{ vars.SERVICE_NAME }}"
@@ -40,12 +41,13 @@ jobs:
           export REVISION_TAG="${{ github.sha }}"
           export CLOUD_RUN_SA="${{ vars.CLOUD_RUN_SA }}"
           export ENVIRONMENT="production"
-          envsubst < ./service-yaml/container.yaml > container-production.yaml
-          cat container-production.yaml
       - name: Deploy to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: ${{ vars.SERVICE_NAME }}
           region: asia-northeast1
-          metadata: container-production.yaml
+          image: asia-northeast1-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REPO }}/${{ vars.SERVICE_NAME }}:${{ github.sha }}
+
+      - name: "Use output"
+        run: 'curl "${{ steps.deploy.outputs.url }}"'
