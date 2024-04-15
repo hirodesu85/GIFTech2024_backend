@@ -7,12 +7,12 @@ class Api::PlacesController < ApplicationController
     lng = params[:lng]
 
     # Todo: 取得APIの記述
-    place = GooglePlacesService.fetch_unique_place(category, distance, latitude, longitude)
+    place = GooglePlacesService.fetch_unique_place(category, distance, lat, lng)
 
     response = {
-      place_id: place.place_id,
-      latitude: place.latitude,
-      longitude: place.longitude
+      place_id: place[:place_id],
+      latitude: place[:latitude],
+      longitude: place[:longitude]
     }
 
     render json: response

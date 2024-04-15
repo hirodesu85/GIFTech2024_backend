@@ -36,7 +36,8 @@ gem "bootsnap", require: false
 # gem "rack-cors"
 
 # 追加項目
-gem 'rest-client'
+gem 'rest-client', '~> 2.1.0'
+gem 'ffi'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

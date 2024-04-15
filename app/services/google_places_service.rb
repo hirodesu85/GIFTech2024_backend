@@ -3,7 +3,7 @@ require 'json'
 
 class GooglePlacesService
   BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
-  API_KEY = "hogefugapiyo"
+  API_KEY = "hoge"
 
   def self.fetch_unique_place(category, distance, latitude, longitude)
     
@@ -13,15 +13,18 @@ class GooglePlacesService
     when 'middle'
       raw_results_json_filter = search_places_json(category, 'near', latitude, longitude)
       raw_results_json_all = search_places_json(category, 'middle', latitude, longitude)
+      puts "Initial near results for middle filter: #{raw_results_json_filter}"
+      puts "Initial middle results: #{raw_results_json_all}"
       # middleの全範囲-nearの全範囲=middleの範囲
-      filter_place_ids = raw_results_json_filter.map { |result| result["place_id"] }
-      raw_results_json = raw_results_json_all.reject { |result| filter_place_ids.include?(result["place_id"]) }
+      filter_place_ids = raw_results_json_filter.map { |result| result['place_id'] }
+      raw_results_json = raw_results_json_all.reject { |result| filter_place_ids.include?(result['place_id']) }
+      puts "Filtered middle results: #{raw_results_json}"
     when 'far'
       raw_results_json_filter = search_places_json(category, 'middle', latitude, longitude)
       raw_results_json_all = search_places_json(category, 'far', latitude, longitude)
       # farの全範囲-middleの全範囲=farの範囲
-      filter_place_ids = raw_results_json_filter.map { |result| result["place_id"] }
-      raw_results_json = raw_results_json_all.reject { |result| filter_place_ids.include?(result["place_id"]) }
+      filter_place_ids = raw_results_json_filter.map { |result| result['place_id'] }
+      raw_results_json = raw_results_json_all.reject { |result| filter_place_ids.include?(result['place_id']) }
     end
     
     # 結果が空の場合、すぐにnilを返す
@@ -31,13 +34,14 @@ class GooglePlacesService
     # ランダムに1つ選択し、未訪問かどうかをチェック
     10.times do
       random_result_json = raw_results_json.sample
-      unless VisitedPlace.exists?(place_id: random_result_json["place_id"])
-        VisitedPlace.create!(place_id: random_result_json["place_id"])
+      place_id = random_result_json['place_id']
+      unless place_id.nil? || VisitedPlace.exists?(place_id: place_id)
+        VisitedPlace.create!(place_id: place_id)
         return format_place(random_result_json)
       end
     end
     # 10回試しても新しい未訪問の場所が見つからなかった場合
-    nil
+    return nil
   end
 
   private
@@ -59,9 +63,9 @@ class GooglePlacesService
 
   def self.format_place(result)
     {
-      place_id: result["place_id"],
-      latitude: result["geometry"]["location"]["lat"],
-      longitude: result["geometry"]["location"]["lng"]
+      place_id: result['place_id'],
+      latitude: result['geometry']['location']['lat'],
+      longitude: result['geometry']['location']['lng']
     }
   end
 
