@@ -1,9 +1,23 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+Bottom.transaction do
+  Bottom.delete_all
+  Bottom.create!(id: 1, name: "サンプル(後で消す)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/bottoms/toy_omocha_asobu_boy.webp", is_mine: true)
+  Bottom.create!(id: 2, name: "サンプル2(後で消す)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/bottoms/d.webp", is_mine: false)
+end
+
+Hair.transaction do
+  Hair.delete_all
+  Hair.create!(id: 1, name: "サンプル(後で消す)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/hairs/toy_omocha_asobu_boy.webp", is_mine: true)
+  Hair.create!(id: 2, name: "サンプル2(後で消す)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/hairs/d.webp", is_mine: false)
+end
+
+Shoe.transaction do
+  Shoe.delete_all
+  Shoe.create!(id: 1, name: "サンプル(後で消す)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/shoes/toy_omocha_asobu_boy.webp", is_mine: true)
+  Shoe.create!(id: 2, name: "サンプル2(後で消す)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/shoes/d.webp", is_mine: false)
+end
+
+Top.transaction do
+  Top.delete_all
+  Top.create!(id: 1, name: "サンプル(後で消す)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/top/toy_omocha_asobu_boy.webp", is_mine: true)
+  Top.create!(id: 2, name: "サンプル2(後で消す)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/top/d.webp", is_mine: false)
+end
