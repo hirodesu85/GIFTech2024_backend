@@ -12,7 +12,8 @@ class Api::PlacesController < ApplicationController
     response = {
       place_id: place[:place_id],
       latitude: place[:latitude],
-      longitude: place[:longitude]
+      longitude: place[:longitude],
+      name: place[:name]
     }
 
     render json: response
