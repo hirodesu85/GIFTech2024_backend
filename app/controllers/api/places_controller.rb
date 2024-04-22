@@ -6,14 +6,23 @@ class Api::PlacesController < ApplicationController
     lat = params[:lat]
     lng = params[:lng]
 
-    place = GooglePlacesService.fetch_unique_place(category, distance, lat, lng)
+    if category == "散歩" then
+      response = {
+        place_id: "ChIJV5RDkIuMGGARkcnIilN6vGI",
+        latitude: 35.686008700916936, 
+        longitude: 139.72764885403225,
+        name: "イメージスタジオ109 四谷スタジオ"
+      }
+    else 
+      place = GooglePlacesService.fetch_unique_place(category, distance, lat, lng)
 
-    response = {
-      place_id: place[:place_id],
-      latitude: place[:latitude],
-      longitude: place[:longitude],
-      name: place[:name]
-    }
+      response = {
+        place_id: place[:place_id],
+        latitude: place[:latitude],
+        longitude: place[:longitude],
+        name: place[:name]
+      }
+    end
 
     render json: response
   end
