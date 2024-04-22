@@ -20,8 +20,8 @@ end
 
 Top.transaction do
   Top.delete_all
-  Top.create!(id: 1, name: "サンプル(後で消す)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/top/toy_omocha_asobu_boy.webp", is_mine: true)
-  Top.create!(id: 2, name: "サンプル2(後で消す)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/top/d.webp", is_mine: false)
+  Top.create!(id: 1, name: "サンプル(後で消す)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/tops/toy_omocha_asobu_boy.webp", is_mine: true)
+  Top.create!(id: 2, name: "サンプル2(後で消す)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/tops/d.webp", is_mine: false)
 end
 
 BeautyGirl.transaction do
