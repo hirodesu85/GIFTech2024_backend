@@ -6,23 +6,24 @@ class GooglePlacesService
   API_KEY = ENV["GOOGLE_PALACES_API_KEY"]
 
   def self.fetch_unique_place(category, distance, latitude, longitude)
-    case distance
-    when 'near'
-      raw_results_json = search_places_json(category, 'near', latitude, longitude)
-    when 'middle'
-      raw_results_json_filter = search_places_json(category, 'near', latitude, longitude)
-      raw_results_json_all = search_places_json(category, 'middle', latitude, longitude)
-      # middleの全範囲-nearの全範囲=middleの範囲
-      filter_place_ids = raw_results_json_filter.map { |result| result['place_id'] }
-      raw_results_json = raw_results_json_all.reject { |result| filter_place_ids.include?(result['place_id']) }
-    when 'far'
-      raw_results_json_filter = search_places_json(category, 'middle', latitude, longitude)
-      raw_results_json_all = search_places_json(category, 'far', latitude, longitude)
-      # farの全範囲-middleの全範囲=farの範囲
-      filter_place_ids = raw_results_json_filter.map { |result| result['place_id'] }
-      raw_results_json = raw_results_json_all.reject { |result| filter_place_ids.include?(result['place_id']) }
+    raw_results_json = []
+    loop do
+      case distance
+      when 'near'
+        raw_results_json = search_places_json(category, latitude, longitude, 1000)
+      when 'middle'
+        selected_location = LocationOffsetter.random_offset(latitude.to_f, longitude.to_f, "middle")
+        raw_results_json = search_places_json(category, selected_location[0], selected_location[1], 1000)
+      when 'far'
+        selected_location = LocationOffsetter.random_offset(latitude.to_f, longitude.to_f, "far")
+        # 見つからなすぎるので半径1kmではなく10kmで検索。
+        raw_results_json = search_places_json(category, selected_location[0], selected_location[1], 10000)
+      end
+
+      # JSONが空でない場合はループを抜ける（farの時に田舎が指定されて見つからない事象が多発するため記述）
+      break unless raw_results_json.empty?
     end
-    
+
     # ランダムに1つ選択し、未訪問かどうかをチェック
     random_result_json = raw_results_json.sample
     place_id = random_result_json['place_id']
@@ -35,16 +36,25 @@ class GooglePlacesService
 
   private
 
-  def self.search_places_json(category, distance, latitude, longitude)
-    radius = map_distance_to_radius(distance)
-    type = map_category_to_type(category)
+  def self.search_places_json(category, latitude, longitude, radius)
+    # typeがspaだとジムや美容院にも引っかかったのでサウナはキーワードで対処してます、、、
+    if category == "サウナ" then
+      params = {
+        key: API_KEY,
+        location: "#{latitude},#{longitude}",
+        radius: radius,
+        keyword: "サウナ"
+      }
+    else
+      type = map_category_to_type(category)
 
-    params = {
-      key: API_KEY,
-      location: "#{latitude},#{longitude}",
-      radius: radius,
-      type: type
-    }
+      params = {
+        key: API_KEY,
+        location: "#{latitude},#{longitude}",
+        radius: radius,
+        type: type
+      }
+    end
 
     response = RestClient.get(BASE_URL, { params: params })
     JSON.parse(response.body)["results"]
@@ -57,17 +67,6 @@ class GooglePlacesService
       longitude: result['geometry']['location']['lng'],
       name: result['name']
     }
-  end
-
-  def self.map_distance_to_radius(distance)
-    case distance
-    when 'near'
-      1000
-    when 'middle'
-      10000
-    when 'far'
-      50000
-    end
   end
 
   def self.map_category_to_type(category)

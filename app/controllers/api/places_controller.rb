@@ -6,7 +6,6 @@ class Api::PlacesController < ApplicationController
     lat = params[:lat]
     lng = params[:lng]
 
-    # Todo: 取得APIの記述
     place = GooglePlacesService.fetch_unique_place(category, distance, lat, lng)
 
     response = {
