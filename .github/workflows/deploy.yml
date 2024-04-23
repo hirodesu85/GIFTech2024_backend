@@ -44,6 +44,7 @@ jobs:
           secrets: |
             RAILS_MASTER_KEY=RAILS_MASTER_KEY:latest
             DATABASE_URL=DATABASE_URL:latest
+            GOOGLE_PLACES_API_KEY=GOOGLE_PLACES_API_KEY:latest
           project_id: ${{ vars.GCP_PROJECT_ID }}
           flags: "--allow-unauthenticated --port=3000"
 
