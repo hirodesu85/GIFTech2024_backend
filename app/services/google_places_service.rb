@@ -18,6 +18,8 @@ class GooglePlacesService
         selected_location = LocationOffsetter.random_offset(latitude.to_f, longitude.to_f, "far")
         # 見つからなすぎるので半径1kmではなく10kmで検索。
         raw_results_json = search_places_json(category, selected_location[0], selected_location[1], 10000)
+      else
+        raise ArgumentError, "無効なdistanceです。#{distance}"
       end
 
       # JSONが空でない場合はループを抜ける（farの時に田舎が指定されて見つからない事象が多発するため記述）
@@ -39,7 +41,7 @@ class GooglePlacesService
       break if raw_results_json.empty?
     end
 
-    raise NotFound
+    raise "場所が見つかりません。"
   end
 
   private

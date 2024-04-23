@@ -22,8 +22,9 @@ class Api::PlacesController < ApplicationController
           longitude: place[:longitude],
           name: place[:name]
         }
-      rescue NotFound
+      rescue ArgumentError, RuntimeError
         render json: { message: '場所が見つかりませんでした。'}, status: :not_found
+        return
       end
     end
 
