@@ -3,7 +3,7 @@ require 'json'
 
 class GooglePlacesService
   BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
-  API_KEY = ENV["GOOGLE_PALACES_API_KEY"]
+  API_KEY = ENV["GOOGLE_PLACES_API_KEY"]
 
   def self.fetch_unique_place(category, distance, latitude, longitude)
     raw_results_json = []
@@ -31,7 +31,7 @@ class GooglePlacesService
       return format_place(random_result_json)
     end
 
-    raise "場所が見つかりません！！！"
+    raise NotFound
   end
 
   private

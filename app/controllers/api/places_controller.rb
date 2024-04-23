@@ -14,14 +14,17 @@ class Api::PlacesController < ApplicationController
         name: "イメージスタジオ109 四谷スタジオ"
       }
     else 
-      place = GooglePlacesService.fetch_unique_place(category, distance, lat, lng)
-
-      response = {
-        place_id: place[:place_id],
-        latitude: place[:latitude],
-        longitude: place[:longitude],
-        name: place[:name]
-      }
+      begin
+        place = GooglePlacesService.fetch_unique_place(category, distance, lat, lng)
+        response = {
+          place_id: place[:place_id],
+          latitude: place[:latitude],
+          longitude: place[:longitude],
+          name: place[:name]
+        }
+      rescue NotFound
+        render json: { message: '場所が見つかりませんでした。'}, status: :not_found
+      end
     end
 
     render json: response
