@@ -13,6 +13,7 @@ class Api::PlacesController < ApplicationController
         longitude: 139.72764885403225,
         name: "イメージスタジオ109 四谷スタジオ"
       }
+      render json: response
     else 
       begin
         place = GooglePlacesService.fetch_unique_place(category, distance, lat, lng)
@@ -22,13 +23,12 @@ class Api::PlacesController < ApplicationController
           longitude: place[:longitude],
           name: place[:name]
         }
-      rescue ArgumentError, RuntimeError
+        render json: response
+      rescue GooglePlacesService::NotFound
         render json: { message: '場所が見つかりませんでした。'}, status: :not_found
-        return
       end
     end
 
-    render json: response
   end
 
   def arrive

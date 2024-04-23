@@ -2,6 +2,7 @@ require 'rest-client'
 require 'json'
 
 class GooglePlacesService
+  class NotFound < StandardError; end
   BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
   API_KEY = ENV["GOOGLE_PLACES_API_KEY"]
 
@@ -19,7 +20,7 @@ class GooglePlacesService
         # 見つからなすぎるので半径1kmではなく10kmで検索。
         raw_results_json = search_places_json(category, selected_location[0], selected_location[1], 10000)
       else
-        raise ArgumentError, "無効なdistanceです。#{distance}"
+        raise NotFound
       end
 
       # JSONが空でない場合はループを抜ける（farの時に田舎が指定されて見つからない事象が多発するため記述）
@@ -41,7 +42,7 @@ class GooglePlacesService
       break if raw_results_json.empty?
     end
 
-    raise "場所が見つかりません。"
+    raise NotFound
   end
 
   private
