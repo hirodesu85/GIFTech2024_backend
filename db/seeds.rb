@@ -26,5 +26,5 @@ end
 
 BeautyGirl.transaction do
   BeautyGirl.delete_all
-  BeautyGirl.create!(id: 1,rank: 8, until_next_rank: 300, hairs_id: 1, shoes_id: 1, tops_id: 1, bottoms_id: 1)
+  BeautyGirl.create!(id: 1,rank: 7, until_next_rank: 300, hairs_id: 1, shoes_id: 1, tops_id: 1, bottoms_id: 1)
 end
