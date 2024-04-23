@@ -24,11 +24,19 @@ class GooglePlacesService
       break unless raw_results_json.empty?
     end
 
-    # ランダムに1つ選択し、未訪問かどうかをチェック
-    random_result_json = raw_results_json.sample
-    place_id = random_result_json['place_id']
-    unless place_id.nil? || VisitedPlace.exists?(place_id: place_id)
-      return format_place(random_result_json)
+    loop do
+      # ランダムに1つ選択し、未訪問かどうかをチェック
+      random_result_json = raw_results_json.sample
+      place_id = random_result_json['place_id']
+      unless place_id.nil? || VisitedPlace.exists?(place_id: place_id)
+        return format_place(random_result_json)
+      end
+
+      # 訪問済みのが選ばれたら再選択させる（再選択の際に訪問済みのplace_idは消しておく）
+      raw_results_json.delete_if { |item| item['place_id'] == place_id }
+
+      # 配列が空になった場合、ループを抜ける
+      break if raw_results_json.empty?
     end
 
     raise NotFound
