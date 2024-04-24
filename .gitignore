@@ -24,3 +24,4 @@
 
 # Ignore local mysql volumes
 /docker/db/data/*
+.env

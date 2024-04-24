@@ -6,15 +6,29 @@ class Api::PlacesController < ApplicationController
     lat = params[:lat]
     lng = params[:lng]
 
-    # Todo: 取得APIの記述
+    if category == "散歩" then
+      response = {
+        place_id: "ChIJV5RDkIuMGGARkcnIilN6vGI",
+        latitude: 35.686008700916936, 
+        longitude: 139.72764885403225,
+        name: "イメージスタジオ109 四谷スタジオ"
+      }
+      render json: response
+    else 
+      begin
+        place = GooglePlacesService.fetch_unique_place(category, distance, lat, lng)
+        response = {
+          place_id: place[:place_id],
+          latitude: place[:latitude],
+          longitude: place[:longitude],
+          name: place[:name]
+        }
+        render json: response
+      rescue GooglePlacesService::NotFound
+        render json: { message: '場所が見つかりませんでした。'}, status: :not_found
+      end
+    end
 
-    response = {
-      place_id: "ChIJw76RQYuMGGARHeYoDcNpsZQ",
-      latitude: 35.68765719762984,
-      longitude: 139.7294224868288
-    }
-
-    render json: response
   end
 
   def arrive
