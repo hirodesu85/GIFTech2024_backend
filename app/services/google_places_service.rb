@@ -54,7 +54,8 @@ class GooglePlacesService
         key: API_KEY,
         location: "#{latitude},#{longitude}",
         radius: radius,
-        keyword: "サウナ"
+        keyword: "サウナ",
+        language: "ja"
       }
     else
       type = map_category_to_type(category)
@@ -63,7 +64,8 @@ class GooglePlacesService
         key: API_KEY,
         location: "#{latitude},#{longitude}",
         radius: radius,
-        type: type
+        type: type,
+        language: "ja"
       }
     end
 
