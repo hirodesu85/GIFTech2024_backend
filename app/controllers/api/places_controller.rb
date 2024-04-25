@@ -11,7 +11,8 @@ class Api::PlacesController < ApplicationController
         place_id: "ChIJV5RDkIuMGGARkcnIilN6vGI",
         latitude: 35.686008700916936, 
         longitude: 139.72764885403225,
-        name: "イメージスタジオ109 四谷スタジオ"
+        name: "イメージスタジオ109 四谷スタジオ",
+        image_url: ""
       }
       render json: response
     else 
@@ -21,7 +22,8 @@ class Api::PlacesController < ApplicationController
           place_id: place[:place_id],
           latitude: place[:latitude],
           longitude: place[:longitude],
-          name: place[:name]
+          name: place[:name],
+          image_url: place[:image_url]
         }
         render json: response
       rescue GooglePlacesService::NotFound
