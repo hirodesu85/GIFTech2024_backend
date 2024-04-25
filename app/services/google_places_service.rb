@@ -55,7 +55,8 @@ class GooglePlacesService
         location: "#{latitude},#{longitude}",
         radius: radius,
         keyword: "サウナ",
-        language: "ja"
+        language: "ja",
+        opennow: true
       }
     else
       type = map_category_to_type(category)
@@ -65,7 +66,8 @@ class GooglePlacesService
         location: "#{latitude},#{longitude}",
         radius: radius,
         type: type,
-        language: "ja"
+        language: "ja",
+        opennow: true
       }
     end
 
