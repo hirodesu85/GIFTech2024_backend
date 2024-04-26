@@ -4,6 +4,8 @@ require 'json'
 class GooglePlacesService
   class NotFound < StandardError; end
   BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+  PLACE_PHOTO_API_URL = "https://maps.googleapis.com/maps/api/place/photo"
+  HOST_URL = "https://giftech2024backend-5lzpcj5rtq-an.a.run.app"
   API_KEY = ENV["GOOGLE_PLACES_API_KEY"]
 
   def self.fetch_unique_place(category, distance, latitude, longitude)
@@ -54,7 +56,9 @@ class GooglePlacesService
         key: API_KEY,
         location: "#{latitude},#{longitude}",
         radius: radius,
-        keyword: "サウナ"
+        keyword: "サウナ",
+        language: "ja",
+        opennow: true
       }
     else
       type = map_category_to_type(category)
@@ -63,7 +67,9 @@ class GooglePlacesService
         key: API_KEY,
         location: "#{latitude},#{longitude}",
         radius: radius,
-        type: type
+        type: type,
+        language: "ja",
+        opennow: true
       }
     end
 
@@ -72,11 +78,19 @@ class GooglePlacesService
   end
 
   def self.format_place(result)
+    place_photo = result['photos'][0]
+    image_url = if place_photo
+                  photo_reference = place_photo['photo_reference']
+                  fetch_place_image_url(photo_reference)
+                else
+                  "#{HOST_URL}/images/no_image.jpeg"
+                end
     {
       place_id: result['place_id'],
       latitude: result['geometry']['location']['lat'],
       longitude: result['geometry']['location']['lng'],
-      name: result['name']
+      name: result['name'],
+      image_url:
     }
   end
 
@@ -84,10 +98,20 @@ class GooglePlacesService
     case category
     when 'サウナ'
       'spa'
-    when 'ごはん'
+    when 'ご飯'
       'restaurant'
     when '散歩'
       nil
     end
+  end
+
+  def self.fetch_place_image_url(photo_reference)
+    params = {
+      key: API_KEY,
+      photo_reference:,
+      maxwidth: 400
+    }
+    response = RestClient.get(PLACE_PHOTO_API_URL, { params: params })
+    response.request.url
   end
 end
