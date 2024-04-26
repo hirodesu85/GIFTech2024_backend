@@ -97,7 +97,7 @@ class GooglePlacesService
     case category
     when 'サウナ'
       'spa'
-    when 'ごはん'
+    when 'ご飯'
       'restaurant'
     when '散歩'
       nil
