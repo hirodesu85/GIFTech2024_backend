@@ -15,13 +15,13 @@ end
 Shoe.transaction do
   Shoe.delete_all
   Shoe.create!(id: 1, name: "キュートなシューズ(黄)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/shoes/Icon_SY.webp", is_mine: true)
-  Shoe.create!(id: 2, name: "キュートなシューズ(白)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/shoes/Icon_SW.webp", is_mine: false)
+  Shoe.create!(id: 2, name: "キュートなシューズ(白)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/shoes/Icon_SW.webp", is_mine: true)
 end
 
 Top.transaction do
   Top.delete_all
   Top.create!(id: 1, name: "キュートなパーカー", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/tops/Item_Pink.webp", is_mine: true)
-  Top.create!(id: 2, name: "キュートなスカジャン", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/tops/Item_Blue.webp", is_mine: false)
+  Top.create!(id: 2, name: "キュートなスカジャン", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/tops/Item_Blue.webp", is_mine: true)
 end
 
 BeautyGirl.transaction do
