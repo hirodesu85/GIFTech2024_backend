@@ -2,8 +2,8 @@
 
 Bottom.transaction do
   Bottom.delete_all
-  Bottom.create!(id: 1, name: "キュートなスカート(青)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/bottoms/toy_omocha_asobu_boy.webp", is_mine: true)
-  Bottom.create!(id: 2, name: "サンプル2(後で消す)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/bottoms/d.webp", is_mine: false)
+  Bottom.create!(id: 1, name: "キュートなボトムス(青)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/bottoms/Icon_BB.webp", is_mine: true)
+  Bottom.create!(id: 2, name: "キュートなボトムス(黒)", image_url: "https://pub-2da3b55c4b23440c8f76b2b22e4db727.r2.dev/bottoms/Icon_BBl.webp", is_mine: false)
 end
 
 Hair.transaction do
