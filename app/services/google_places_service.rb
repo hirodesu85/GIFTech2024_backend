@@ -26,6 +26,11 @@ class GooglePlacesService
         raise NotFound
       end
 
+      if category == 'ご飯'
+        excluded_shop_patterns = %w(マクドナルド ロッテリア すき家 松屋 ココス バーミヤン サイゼリヤ ジョナサン ピザハット ゆで太郎)
+        raw_results_json.delete_if { |item| excluded_shop_patterns.any? { |pattern| item['name'].match?(pattern)} }
+      end
+
       # JSONが空でない場合はループを抜ける（farの時に田舎が指定されて見つからない事象が多発するため記述）
       break unless raw_results_json.empty?
     end
