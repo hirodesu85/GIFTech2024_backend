@@ -6,16 +6,16 @@ class Api::PlacesController < ApplicationController
     lat = params[:lat]
     lng = params[:lng]
 
-    if category == "散歩" then
+    if category == "ご飯" && distance == "near" then
       response = {
         place_id: "ChIJV5RDkIuMGGARkcnIilN6vGI",
-        latitude: 35.686008700916936, 
+        latitude: 35.686008700916936,
         longitude: 139.72764885403225,
-        name: "イメージスタジオ109 四谷スタジオ",
-        image_url: ""
+        name: "本窯イタリアン pizza BUONO!  新宿店",
+        image_url: "#{GooglePlacesService::HOST_URL}/images/sample_restaurant.jpg"
       }
       render json: response
-    else 
+    else
       begin
         place = GooglePlacesService.fetch_unique_place(category, distance, lat, lng)
         response = {
@@ -57,7 +57,7 @@ class Api::PlacesController < ApplicationController
     render json: response
   end
 
-  private 
+  private
 
   # 距離から付与するランクポイントを計算する
   # @param distance [String] 距離(near, middle, far)
