@@ -14,6 +14,7 @@ class GooglePlacesService
       case distance
       when 'near'
         raw_results_json = search_places_json(category, latitude, longitude, 1000)
+        raise NotFound if raw_results_json.empty?
       when 'middle'
         selected_location = LocationOffsetter.random_offset(latitude.to_f, longitude.to_f, "middle")
         raw_results_json = search_places_json(category, selected_location[0], selected_location[1], 1000)
