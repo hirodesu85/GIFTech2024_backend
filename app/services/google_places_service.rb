@@ -13,7 +13,7 @@ class GooglePlacesService
     loop do
       case distance
       when 'near'
-        raw_results_json = search_places_json(category, latitude, longitude, 1000)
+        raw_results_json = search_places_json(category, latitude, longitude, 5000)
         raise NotFound if raw_results_json.empty?
       when 'middle'
         selected_location = LocationOffsetter.random_offset(latitude.to_f, longitude.to_f, "middle")
@@ -79,8 +79,8 @@ class GooglePlacesService
   end
 
   def self.format_place(result)
-    place_photo = result['photos'][0]
-    image_url = if place_photo
+    image_url = if result.key?('photos') && result['photos'].present?
+                  place_photo = result['photos'][0]
                   photo_reference = place_photo['photo_reference']
                   fetch_place_image_url(photo_reference)
                 else
