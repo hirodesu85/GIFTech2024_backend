@@ -79,8 +79,8 @@ class GooglePlacesService
   end
 
   def self.format_place(result)
-    place_photo = result['photos'][0]
-    image_url = if place_photo
+    image_url = if result.key?('photos') && result['photos'].present?
+                  place_photo = result['photos'][0]
                   photo_reference = place_photo['photo_reference']
                   fetch_place_image_url(photo_reference)
                 else
