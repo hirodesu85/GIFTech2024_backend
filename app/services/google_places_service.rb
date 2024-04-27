@@ -102,7 +102,7 @@ class GooglePlacesService
     when 'ご飯'
       'restaurant'
     when '散歩'
-      nil
+      'park'
     end
   end
 
