@@ -7,8 +7,8 @@ class LocationOffsetter
     def self.random_offset(latitude, longitude, distanceType)
 
       if distanceType == 'middle' then
-        # ランダムな距離（2km〜10km）を生成
-        distance = rand(2.0..10.0)
+        # ランダムな距離（6km〜50km）を生成
+        distance = rand(6.0..50.0)
       elsif distanceType == 'far' then
         # ランダムな距離（250km～800km）を生成
         distance = rand(250.0..800.0)
